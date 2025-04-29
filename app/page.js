@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const userData = [
@@ -14,6 +14,15 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(function () {
+    const cookies = document.cookie.split("; ").reduce((accum, elem) => {
+      const [key, value] = elem.split("=");
+      accum[key] = value;
+      return accum;
+    }, {});
+    if (cookies.userData) router.push("/dashboard");
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

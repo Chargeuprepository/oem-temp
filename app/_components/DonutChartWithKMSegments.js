@@ -20,8 +20,6 @@ const data = [
 const COLORS = ["#00C49F", "#FFBB28", "#FF8042", "#FF4D4F"];
 
 export default function DonutChartWithKMSegments({ runKm }) {
-  const totalDrivers = runKm.reduce((acc, cur) => acc + cur.value, 0);
-
   // Hover state to track the active segment
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -40,19 +38,21 @@ export default function DonutChartWithKMSegments({ runKm }) {
         <h2 className="text-xl font-semibold text-gray-800 mb-2">
           Driver Distance Distribution
         </h2>
-        <p className="text-gray-500">
-          <span className="font-medium text-black">{totalDrivers}</span> drivers
-          categorized by their daily driving distance.
+        <p className="text-gray-500 font-extralight text-sm">
+          {/* <span className="font-medium text-black">{totalDrivers}</span>  */}
+          Drivers categorized by their daily driving distance.
         </p>
-        <ul className="space-y-1.5 text-sm text-gray-600 mt-10">
-          {runKm.map((item, idx) => (
+        <ul className="space-y-1.5 text-sm text-gray-600 mt-6 ">
+          {runKm.frame.map((item, idx) => (
             <li key={idx} className="flex items-center">
               <span
                 className="inline-block w-3 h-3 rounded-full mr-2"
                 style={{ backgroundColor: COLORS[idx] }}
               ></span>
               {item.name}:{" "}
-              <span className="ml-1 font-medium text-black">{item.value}</span>
+              <span className="ml-1 font-medium text-black">
+                {Math.round((item.value / runKm.count) * 100)}%
+              </span>
             </li>
           ))}
         </ul>
@@ -63,7 +63,7 @@ export default function DonutChartWithKMSegments({ runKm }) {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={runKm}
+              data={runKm.frame}
               innerRadius={70}
               outerRadius={100}
               paddingAngle={3}
@@ -71,7 +71,7 @@ export default function DonutChartWithKMSegments({ runKm }) {
               startAngle={90}
               endAngle={-270}
             >
-              {runKm.map((entry, index) => (
+              {runKm.frame.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index]} // Change color on hover

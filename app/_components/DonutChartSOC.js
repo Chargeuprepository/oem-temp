@@ -15,7 +15,7 @@ const COLORS = [
 ];
 
 export default function DonutChartSOC({ soc }) {
-  const total = soc.reduce((acc, cur) => acc + cur.value, 0);
+  const total = soc.count;
 
   return (
     <div className="w-full flex flex-col md:flex-row bg-white rounded-xl shadow-md p-4 md:p-6 items-center md:items-start justify-between">
@@ -24,7 +24,7 @@ export default function DonutChartSOC({ soc }) {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={soc}
+              data={soc.frame}
               innerRadius={70}
               outerRadius={100}
               paddingAngle={3}
@@ -32,7 +32,7 @@ export default function DonutChartSOC({ soc }) {
               startAngle={90}
               endAngle={-270}
             >
-              {soc.map((entry, index) => (
+              {soc.frame.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />
               ))}
             </Pie>
@@ -47,19 +47,21 @@ export default function DonutChartSOC({ soc }) {
           SOC Distribution
           <span className="text-base text-gray-600"> ({"<"} 20%)</span>
         </h2>
-        <p className="text-gray-500 mb-4">
-          <span className="font-medium text-black">{total}</span> batteries have
-          SOC below 20%.
+        <p className="text-gray-500 text-sm mb-4">
+          {/* <span className="font-medium text-black">{total}</span> */}
+          Batteries have SOC below 20%.
         </p>
         <ul className="space-y-2 text-sm text-gray-700">
-          {soc.map((item, idx) => (
+          {soc.frame.map((item, idx) => (
             <li key={idx} className="flex items-center">
               <span
                 className="inline-block w-3 h-3 rounded-full mr-2"
                 style={{ backgroundColor: COLORS[idx] }}
               ></span>
               {item.name}:{" "}
-              <span className="ml-1 font-medium text-black">{item.value}</span>
+              <span className="ml-1 font-medium text-black">
+                {Math.round((item.value / total) * 100)} %
+              </span>
             </li>
           ))}
         </ul>

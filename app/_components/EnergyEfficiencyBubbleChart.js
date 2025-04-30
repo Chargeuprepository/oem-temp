@@ -26,13 +26,7 @@ export default function EnergyEfficiencyBubbleChart({ energy }) {
   const goodEfficiency = energy.filter((d) => d.efficiency === "#00C853");
   const avgEfficiency = energy.filter((d) => d.efficiency === "#2962FF");
   const badEfficiency = energy.filter((d) => d.efficiency === "#FFD600");
-
-  console.log(
-    energy.length,
-    goodEfficiency.length,
-    avgEfficiency.length,
-    badEfficiency.length
-  );
+  const worstEfficiency = energy.filter((d) => d.efficiency === "#D50000");
 
   return (
     <div className="w-full h-[400px] md:h-[500px] bg-white rounded-xl shadow p-4">
@@ -109,6 +103,13 @@ export default function EnergyEfficiencyBubbleChart({ energy }) {
             data={badEfficiency}
             fill="#FFF9C4" // light yellow fill
             stroke="#FFD600" // dark yellow outline
+            shape="circle"
+          />
+          <Scatter
+            name="Poor Efficiency"
+            data={worstEfficiency}
+            fill="#FFE5E7"
+            stroke="#D50000"
             shape="circle"
           />
         </ScatterChart>

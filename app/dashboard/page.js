@@ -47,11 +47,11 @@ export default async function Page() {
       <div className="flex justify-between my-8 mx-14">
         <TopCard
           head1={"Total Batteries"}
-          head2={"Newly Added"}
-          head3={"Old Batteries"}
+          head2={"Regular"}
+          head3={"Service"}
           value1={summary[0].totalBatteries}
-          value2={summary[0].newAdd}
-          value3={summary[0].old}
+          value2={summary[0].regular}
+          value3={summary[0].service}
           linec1={"bg-yellow-500"}
           linec2={"bg-yellow-200"}
           iconc1={"text-yellow-500"}
@@ -60,10 +60,10 @@ export default async function Page() {
         <TopCard
           head1={"Running Batteries"}
           head2={"SOC > 20%"}
-          head3={"idle"}
+          head3={"SOC <= 20%"}
           value1={summary[1].running}
           value2={summary[1].socGreaterThan20}
-          value3={""}
+          value3={summary[1].socLesserThan20}
           linec1={"bg-green-500"}
           linec2={"bg-green-100"}
           iconc1={"text-green-500"}
@@ -71,10 +71,10 @@ export default async function Page() {
         ></TopCard>
         <TopCard
           head1={"Idle"}
-          head2={"SOC < 20%"}
-          head3={"Under Maintenance"}
+          head2={"In Charge"}
+          head3={"Stopped"}
           value1={summary[2].idle}
-          value2={summary[2].socLesserThan20}
+          value2={""}
           value3={""}
           linec1={"bg-orange-500"}
           linec2={"bg-orange-100"}
@@ -83,11 +83,11 @@ export default async function Page() {
         ></TopCard>
         <TopCard
           head1={"Immobilized"}
-          head2={"SOC < 20%"}
-          head3={"Under Maintenance"}
+          head2={"SOC <= 10%"}
+          head3={"SOC = 0"}
           value1={summary[3].immobilized}
-          value2={""}
-          value3={""}
+          value2={summary[3].socLessThan10}
+          value3={summary[3].socEqualsTo0}
           linec1={"bg-blue-500"}
           linec2={"bg-blue-100"}
           iconc1={"text-blue-500"}

@@ -14,7 +14,7 @@ import {
 export default function SOHVsKmChart({ soh }) {
   return (
     <div className="rounded-xl p-4 shadow">
-      <h2 className="text-center text-lg font-semibold text-blue-800 mb-2">
+      <h2 className="text-center text-lg font-semibold text-gray-800 mb-2">
         SOH Vs Km
       </h2>
       <ResponsiveContainer width="100%" height={350}>

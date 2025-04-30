@@ -1,8 +1,3 @@
-import {
-  beforeCurrentMonth,
-  inCurrentMonth,
-} from "@/app/_components/purchaseDateCalc";
-
 export default async function oemData(userName) {
   const res = await fetch("https://temp-oem-data.vercel.app/data.json");
   const drivers = await res.json();
@@ -16,28 +11,45 @@ export default async function oemData(userName) {
     // Card 1
     const card1 = {
       totalBatteries: ans.length,
-      newAdd: inCurrentMonth(ans),
-      old: beforeCurrentMonth(ans),
+      regular: ans.filter((val) => val.Btype === "Regular Battery").length,
+      service: ans.filter((val) => val.Btype === "Service Battery").length,
     };
     // Card 2
+    const runnBatt =
+      ans.length - ans.filter((driver) => driver.Status === "stopped").length;
     const card2 = {
-      running: ans.filter((driver) => driver.Status === "running").length,
-      socGreaterThan20: ans.filter((driver) => +driver.SOC > 20).length,
+      running: runnBatt,
+      socGreaterThan20: ans.filter(
+        (driver) => driver.Status === "stopped" && +driver.SOC > 20
+      ).length,
+      socLesserThan20:
+        runnBatt -
+        ans.filter((driver) => driver.Status === "stopped" && +driver.SOC > 20)
+          .length,
     };
     // Card 3
     const card3 = {
       idle: ans.filter((driver) => driver.Status === "stopped").length,
-      socLesserThan20: ans.filter((driver) => +driver.SOC <= 20).length,
+      inCharge: ans.filter((driver) => driver.Status === "stopped").length,
+      stopped: ans.filter((driver) => driver.Status === "stopped").length,
     };
     // Card 4
     const card4 = {
       immobilized: ans.filter((driver) => driver.Status === "immobilized")
         .length,
+      socLessThan10: ans.filter(
+        (driver) =>
+          driver.Status === "immobilized" &&
+          +driver.SOC <= 10 &&
+          +driver.SOC > 0
+      ).length,
+      socEqualsTo0: ans.filter(
+        (driver) => (driver.Status === "immobilized" && +driver.SOC) === 20
+      ).length,
     };
 
     return [card1, card2, card3, card4];
   };
-
   // SOH vs KMs
   const sohVsKm = function () {
     const drivers = ans.filter((driver) => {
@@ -63,7 +75,7 @@ export default async function oemData(userName) {
     const drivers = ans.filter((driver) => {
       return +driver.kmPerDay > 0;
     });
-    console.log(drivers.length);
+
     const frame = [
       { name: ">80 km/day", value: 0 },
       { name: "40-80 km/day", value: 0 },
@@ -80,7 +92,7 @@ export default async function oemData(userName) {
         }
       });
     });
-    return frame;
+    return { frame, count: drivers.length };
   };
   // SOC Distribution
   const socDistibution = function () {
@@ -105,7 +117,7 @@ export default async function oemData(userName) {
       });
     });
 
-    return frame;
+    return { frame, count: drivers.length };
   };
   // Energy Delivered
   const energyDelivered = function () {
@@ -122,7 +134,9 @@ export default async function oemData(userName) {
             ? "#00C853"
             : energyCalc >= 12 && energyCalc < 16
             ? "#2962FF"
-            : "#FFD600",
+            : energyCalc > 9 && energyCalc < 12
+            ? "#FFD600"
+            : "#D50000",
       };
     });
 

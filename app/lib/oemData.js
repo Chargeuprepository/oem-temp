@@ -40,10 +40,10 @@ export default async function oemData(userName) {
 
   // SOH vs KMs
   const sohVsKm = function () {
-    ans = ans.filter((driver) => {
+    const drivers = ans.filter((driver) => {
       return +driver.SOH > 0 && +driver.Km > 0;
     });
-    const frame = ans.map((driver) => {
+    const frame = drivers.map((driver) => {
       return {
         km: +driver.Km,
         soh: +driver.SOH,
@@ -60,16 +60,17 @@ export default async function oemData(userName) {
   };
   // RunKms
   const runKms = function () {
-    ans = ans.filter((driver) => {
-      return +driver.Km > 0;
+    const drivers = ans.filter((driver) => {
+      return +driver.kmPerDay > 0;
     });
+    console.log(drivers.length);
     const frame = [
       { name: ">80 km/day", value: 0 },
       { name: "40-80 km/day", value: 0 },
       { name: "20-40 km/day", value: 0 },
       { name: "0-20 km/day", value: 0 },
     ];
-    ans.map((driver) => {
+    drivers.map((driver) => {
       frame.forEach((elem) => {
         const kms = elem.name.split(" ")[0];
         const range = kms.includes(">") ? ["80", "1000"] : kms.split("-");
@@ -83,7 +84,7 @@ export default async function oemData(userName) {
   };
   // SOC Distribution
   const socDistibution = function () {
-    ans = ans.filter((driver) => {
+    const drivers = ans.filter((driver) => {
       return +driver.SOC > 0;
     });
     const frame = [
@@ -92,7 +93,7 @@ export default async function oemData(userName) {
       { name: "SOC 0-5%", value: 0 },
     ];
 
-    const filteredSOC = ans.filter((driver) => +driver.SOC <= 20);
+    const filteredSOC = drivers.filter((driver) => +driver.SOC <= 20);
 
     filteredSOC.map((driver) => {
       frame.forEach((elem) => {
@@ -108,10 +109,10 @@ export default async function oemData(userName) {
   };
   // Energy Delivered
   const energyDelivered = function () {
-    ans = ans.filter((driver) => {
+    const drivers = ans.filter((driver) => {
       return +driver.Km > 0 && +driver["Energy(kwh)"] > 0;
     });
-    const frame = ans.map((driver) => {
+    const frame = drivers.map((driver) => {
       const energyCalc = +driver.Km / +driver["Energy(kwh)"];
       return {
         km: +driver.Km,

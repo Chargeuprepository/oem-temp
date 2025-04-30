@@ -112,14 +112,14 @@ export default async function oemData(userName) {
       return +driver.Km > 0 && +driver["Energy(kwh)"] > 0;
     });
     const frame = ans.map((driver) => {
-      const energyCalc = +driver.Km / +driver.SOC;
+      const energyCalc = +driver.Km / +driver["Energy(kwh)"];
       return {
         km: +driver.Km,
         energy: +driver["Energy(kwh)"],
         efficiency:
-          energyCalc >= 0.016
+          energyCalc >= 16
             ? "#00C853"
-            : energyCalc >= 0.012 && energyCalc < 0.016
+            : energyCalc >= 12 && energyCalc < 16
             ? "#2962FF"
             : "#FFD600",
       };

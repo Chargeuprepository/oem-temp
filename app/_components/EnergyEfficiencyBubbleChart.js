@@ -66,9 +66,10 @@ export default function EnergyEfficiencyBubbleChart({ energy }) {
             label={{
               value: "Energy Delivered (kWh)",
               angle: -90,
-              offset: -30, // <-- Increase this for more spacing
+              offset: -20, // <-- Increase this for more spacing
               style: { fill: "#444", fontSize: 13 },
               position: "insideLeft",
+              dy: 65,
             }}
           />
           <ZAxis dataKey="size" range={[60, 60]} name="Battery Size" />
@@ -76,10 +77,10 @@ export default function EnergyEfficiencyBubbleChart({ energy }) {
             cursor={{ strokeDasharray: "3 3" }}
             formatter={(value, name) => [`${value}`, name]}
           />
-          <Legend
+          {/* <Legend
             verticalAlign="bottom"
             wrapperStyle={{ marginBottom: -40, fontSize: 12 }}
-          />
+          /> */}
           <ReferenceLine
             segment={[
               { x: 0, y: 0 },
@@ -92,19 +93,22 @@ export default function EnergyEfficiencyBubbleChart({ energy }) {
           <Scatter
             name="Good Efficiency"
             data={goodEfficiency}
-            fill="#00C853"
+            fill="#B9F6CA" // light green fill
+            stroke="#00C853" // dark green outline
             shape="circle"
           />
           <Scatter
             name="Average Efficiency"
             data={avgEfficiency}
-            fill="#2962FF"
+            fill="#BBDEFB" // light blue fill
+            stroke="#2962FF" // dark blue outline
             shape="circle"
           />
           <Scatter
-            name="Bad Efficiency"
+            name="Poor Efficiency"
             data={badEfficiency}
-            fill="#FFD600"
+            fill="#FFF9C4" // light yellow fill
+            stroke="#FFD600" // dark yellow outline
             shape="circle"
           />
         </ScatterChart>
